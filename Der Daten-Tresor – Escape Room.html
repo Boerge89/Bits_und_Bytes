@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Der Daten-Tresor – Escape Room</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3f8;--card:#fff;--ink:#10223a;--mut:#52657f;--pri:#0b7a6b;--onp:#fff;--acc:#c2410c;--ok:#0e7a52;--bad:#c62f3a;--soft:#e3edf5;--line:#cbd9e6;--h1:#0f3d4c;--h2:#0b7a6b;--mk:#fff4d6;--mkt:#3a2a00;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080e1c;--card:#111a32;--ink:#e6f1ff;--mut:#93a8c9;--pri:#2de2b4;--onp:#04201a;--acc:#ffb15c;--ok:#3ccf91;--bad:#ff7d84;--soft:#1a2748;--line:#27386a;--h1:#06202c;--h2:#0a5a52;--mk:#3a3015;--mkt:#ffe9b0;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#080e1c;--card:#111a32;--ink:#e6f1ff;--mut:#93a8c9;--pri:#2de2b4;--onp:#04201a;--acc:#ffb15c;--ok:#3ccf91;--bad:#ff7d84;--soft:#1a2748;--line:#27386a;--h1:#06202c;--h2:#0a5a52;--mk:#3a3015;--mkt:#ffe9b0;color-scheme:dark}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,.big,.key b{font-family:Fredoka,"Trebuchet MS",system-ui,sans-serif;line-height:1.15}
+header{background:linear-gradient(135deg,var(--h1),var(--h2));color:#fff;padding:34px 16px 70px;text-align:center}
+header h1{font-size:clamp(2.1rem,7vw,3.4rem);margin:.2em 0}
+header p{max-width:640px;margin:0 auto 12px}
+.stat{display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:center;align-items:center;font-weight:700;margin-top:16px}
+.sl{display:inline-grid;place-items:center;width:42px;height:50px;margin:0 3px;border-radius:10px;border:2px solid var(--line);background:var(--soft);font:700 1.5rem monospace;font-style:normal;color:var(--mut)}
+header .sl{background:#ffffff22;border-color:#ffffff66;color:#fff}
+.sl.on{border-color:var(--pri);color:var(--pri);box-shadow:0 0 14px var(--pri)}
+header .sl.on{background:#fff;color:#0f3d4c;border-color:#fff}
+main{max-width:860px;margin:-40px auto 0;padding:0 16px 30px}
+.card{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--pri);border-radius:20px;padding:22px;margin:0 0 22px;box-shadow:0 8px 28px rgba(10,40,80,.12)}
+h2{font-size:1.6rem;margin:0 0 .4em}
+.mut{color:var(--mut)}
+.locked{border-left-color:var(--line)}
+.locked>:not(h2):not(.lk){display:none}
+.lk{display:none;color:var(--mut);margin:0}.locked .lk{display:block}
+.solved .rb,.solved .tb{opacity:.55;pointer-events:none}
+button{font:inherit}
+.btn{background:var(--pri);color:var(--onp);border:0;border-radius:99px;padding:10px 22px;font-weight:700;cursor:pointer}
+.btn:hover{filter:brightness(1.1)}
+.pill{border:2px solid var(--line);background:var(--soft);color:var(--ink);border-radius:99px;padding:6px 16px;font-weight:700;cursor:pointer;margin:3px}
+.pill:disabled{opacity:.35;cursor:default}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+input[type=text]{font:inherit;padding:8px 12px;border-radius:12px;border:2px solid var(--line);background:var(--soft);color:var(--ink);width:110px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.big{font-size:2.2rem;margin:.2em 0;word-break:break-word}
+.lamps{display:flex;gap:10px;margin:12px 0}
+.lp{width:62px;height:84px;border-radius:16px;border:2px solid var(--line);background:var(--soft);font-size:1.7rem;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:.2s}
+.lp b{font:700 1.1rem monospace}
+.lp.on{background:#fff3b0;border-color:#ffd43b;box-shadow:0 0 22px #ffd43b99;color:#14213d}
+.ch{display:inline-block;font:700 1rem monospace;background:var(--soft);border-radius:8px;padding:3px 9px;margin:3px}
+.fb{border-radius:12px;padding:8px 14px;background:var(--soft);margin:10px 0}
+.fb.good{color:var(--ok);font-weight:700}.fb.bad{color:var(--bad);font-weight:700}
+.tp{background:var(--soft);border-radius:12px;padding:8px 14px}
+.key{margin-top:12px;background:var(--mk);color:var(--mkt);border-left:6px solid var(--acc);border-radius:12px;padding:10px 14px}
+.key b{font-size:2rem}.key a{color:inherit;font-weight:700}
+.dg input{width:54px;height:66px;text-align:center;font:700 2rem monospace;border-radius:12px;border:2px solid var(--line);background:var(--soft);color:var(--ink);padding:0}
+#win{text-align:center}
+footer{text-align:center;color:var(--mut);padding:0 16px 30px;font-size:.9rem}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🔐 Der Daten-Tresor</h1>
+  <p>Die Tür fällt ins Schloss! Du und Pepe seid im Serverraum eingesperrt. Der Ausgang hat ein Zahlenschloss mit 5 Ziffern.</p>
+  <p>Löse die Rätsel der Reihe nach. Jedes Rätsel verrät dir eine Schlüsselzahl. Am Ende gibst du alle Zahlen als Code ein.</p>
+  <div class="stat"><span>⏱ <b id="tm">00:00</b></span><span aria-label="Gesammelte Schlüsselzahlen"><i class="sl">?</i><i class="sl">?</i><i class="sl">?</i><i class="sl">?</i><i class="sl">?</i></span><span>🗝️ <b id="cnt">0</b> von 5</span></div>
+</header>
+<main>
+<div id="rooms"></div>
+
+<section class="card locked" id="dr">
+  <h2>🔐 Das Zahlenschloss</h2>
+  <p class="lk">🔒 Gesperrt – sammle zuerst alle fünf Schlüsselzahlen.</p>
+  <p>Gib die fünf Schlüsselzahlen <b>in der Reihenfolge der Räume</b> ein (Raum 1 zuerst).</p>
+  <p id="nt" class="mut"></p>
+  <div class="row dg" id="dg"><input inputmode="numeric" maxlength="1" aria-label="Ziffer 1"><input inputmode="numeric" maxlength="1" aria-label="Ziffer 2"><input inputmode="numeric" maxlength="1" aria-label="Ziffer 3"><input inputmode="numeric" maxlength="1" aria-label="Ziffer 4"><input inputmode="numeric" maxlength="1" aria-label="Ziffer 5"></div>
+  <button class="btn" id="open">Tür öffnen</button>
+  <p class="fb" hidden></p>
+  <div id="win" hidden></div>
+</section>
+</main>
+<footer>Escape Room zum Kapitel 2.3 „Bits und Bytes“ · Informatik Klasse 6</footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const nz=s=>s.replace(/\s/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.').toLowerCase();
+const OR=['Byte','Kilobyte','Megabyte','Gigabyte','Terabyte','Petabyte'],SH=['Gigabyte','Byte','Petabyte','Kilobyte','Terabyte','Megabyte'];
+const R=[
+{n:'Der Aufzug',k:3,tip:'Mit n Bits gibt es 2ⁿ Zustände. Probiere 2 und 3 Bits aus.',
+s:'Der Aufzug im Serverturm hat <b>6 Stockwerke</b>. Sein Kontrollsystem soll mit möglichst wenigen Bits speichern, in welchem Stockwerk er gerade steht. Wie viele Bits braucht es mindestens? Stelle die Lampen ein.',
+h:'<div class="row"><button class="pill" id="a1m">− Bit</button><button class="pill" id="a1p">+ Bit</button></div><p class="big" id="a1l" aria-live="polite"></p><p id="a1t"></p><button class="btn" id="a1c">Das reicht!</button>'},
+{n:'Die Lichtschalter',k:8,tip:'Jeder Schalter verdoppelt die Möglichkeiten: 2 · 2 · 2.',
+s:'Im Flur hängen <b>3 Lichtschalter</b>. Jede Stellung (an = 1, aus = 0) ist ein anderes Muster. Schalte alle Muster durch und sammle sie. Wie viele Muster gibt es insgesamt?',
+h:'<div class="lamps" id="a2l"></div><div id="a2f"></div><div class="row"><label for="a2i">Alle Muster zusammen:</label><input type="text" id="a2i" inputmode="numeric"><button class="btn" id="a2c">Prüfen</button></div>'},
+{n:'Die Datenträger',k:4,tip:'Die Reihe beginnt mit dem Byte. Von Kilobyte an ist jede Einheit 1000-mal so groß wie die vorherige.',
+s:'Im Regal liegen sechs Etiketten durcheinander. Tippe die Einheiten von der <b>kleinsten zur größten</b> an. Die Schlüsselzahl ist der Platz, an dem das <b>Gigabyte</b> steht.',
+h:'<div id="a3s"></div><p id="a3o"></p><button class="pill" id="a3r">Zurücksetzen</button>'},
+{n:'Das Backup',k:7,tip:'1 GB = 1000 MB. Eine Einheit größer: Das Komma wandert 3 Stellen nach links.',
+s:'Auf dem Bildschirm steht: „Backup-Größe: 7000 MB“. Das Schloss will die Größe in <b>Gigabyte</b> wissen. Wie viele GB sind das?',
+h:'<div class="row"><label for="a4i">7000 MB sind … GB:</label><input type="text" id="a4i" inputmode="decimal"><button class="btn" id="a4c">Prüfen</button></div>'},
+{n:'Die Nachricht',k:5,tip:'Zähle die Buchstaben. Ein Zeichen braucht 1 Byte.',
+s:'Auf dem letzten Monitor blinkt eine Nachricht. Jedes Zeichen braucht <b>1 Byte</b> Speicher. Wie viele Byte braucht das Wort?',
+h:'<p class="big">D A T E N</p><div class="row"><label for="a5i">Das Wort braucht … Byte:</label><input type="text" id="a5i" inputmode="numeric"><button class="btn" id="a5c">Prüfen</button></div>'}
+];
+$('#rooms').innerHTML=R.map((r,i)=>`<section class="card ${i?'locked':''}" id="r${i}"><h2>🚪 Raum ${i+1}: ${r.n}</h2><p class="lk">🔒 Gesperrt – löse zuerst Raum ${i}.</p><p>${r.s}</p><div class="rb">${r.h}</div><p class="fb" hidden></p><button class="pill tb">💡 Tipp anzeigen</button><p class="tp" hidden>${r.tip}</p><div class="key" hidden></div></section>`).join('');
+$('#rooms').onclick=e=>{const t=e.target.closest('.tb');if(t){const p=t.nextElementSibling;p.hidden=!p.hidden;t.textContent=p.hidden?'💡 Tipp anzeigen':'💡 Tipp verbergen'}};
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.matches('.rb input')){const b=e.target.closest('.rb').querySelector('.btn');if(b)b.click()}});
+
+/* Spielstand */
+const D=[null,null,null,null,null],t0=Date.now();let won=0;
+const tm=()=>{const s=Math.floor((Date.now()-t0)/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+setInterval(()=>{if(!won)$('#tm').textContent=tm()},1000);
+const fb=(id,m,g)=>{const f=$('#'+id+' .fb');f.hidden=false;f.className='fb '+(g?'good':'bad');f.textContent=m};
+const nt=()=>$('#nt').innerHTML='Dein Notizzettel: '+D.map((d,j)=>`Raum ${j+1}: <b>${d===null?'?':d}</b>`).join(' · ');
+function done(i,why){const r=$('#r'+i);D[i]=R[i].k;r.classList.add('solved');fb('r'+i,'✅ Richtig!',1);
+const k=r.querySelector('.key');k.hidden=false;k.innerHTML=`🗝️ Schlüsselzahl: <b>${D[i]}</b><br><small>${why}</small><br><a href="#${i<4?'r'+(i+1):'dr'}">Weiter ↓</a>`;
+(i<4?$('#r'+(i+1)):$('#dr')).classList.remove('locked');
+const s=$$('.sl')[i];s.textContent=D[i];s.classList.add('on');
+$('#cnt').textContent=D.filter(x=>x!==null).length;nt()}
+nt();
+
+/* Raum 1: Aufzug */
+let n1=1;
+function r1(){$('#a1l').textContent='💡'.repeat(n1);$('#a1t').innerHTML=`${n1} Bit${n1>1?'s':''} ergeben 2<sup>${n1}</sup> = ${2**n1} Zustände.`}
+$('#a1m').onclick=()=>{n1=Math.max(1,n1-1);r1()};
+$('#a1p').onclick=()=>{n1=Math.min(6,n1+1);r1()};
+$('#a1c').onclick=()=>n1==3?done(0,'2 · 2 · 2 = 8 Zustände reichen für 6 Stockwerke, mit 2 Bits wären es nur 4.'):fb('r0',n1<3?`Mit ${n1} Bits gibt es nur ${2**n1} Zustände – zu wenig für 6 Stockwerke.`:'Das reicht zwar, aber es geht mit weniger Bits!');
+r1();
+
+/* Raum 2: Lichtschalter */
+const L=[0,0,0],F=new Set();
+function r2(){F.add(L.join(''));
+$('#a2l').innerHTML=L.map((x,i)=>`<button class="lp ${x?'on':''}" data-i="${i}" aria-label="Schalter ${i+1}: ${x}">${x?'💡':'🌑'}<b>${x}</b></button>`).join('');
+$('#a2f').innerHTML=`<p>Gefundene Muster: <b>${F.size}</b></p>`+[...F].sort().map(s=>`<span class="ch">${s}</span>`).join('')}
+$('#a2l').onclick=e=>{const t=e.target.closest('.lp');if(t){L[t.dataset.i]^=1;r2()}};
+$('#a2c').onclick=()=>{const v=nz($('#a2i').value);v=='8'?done(1,'Jeder Schalter hat 2 Stellungen: 2 · 2 · 2 = 8 verschiedene Muster.'):fb('r1',v?`Nein. Du hast bisher ${F.size} Muster gefunden – schalte weiter und zähle alle!`:'Gib zuerst eine Zahl ein.')};
+r2();
+
+/* Raum 3: Datenträger */
+let od=[];
+function r3(){$('#a3s').innerHTML=SH.map(u=>`<button class="pill" ${od.includes(u)?'disabled':''}>${u}</button>`).join('');
+$('#a3o').innerHTML=od.length?od.map(u=>`<span class="ch">${u}</span>`).join(' → '):'<span class="mut">Deine Reihenfolge erscheint hier …</span>'}
+$('#a3s').onclick=e=>{const t=e.target.closest('button');if(!t||t.disabled)return;od.push(t.textContent);r3();
+if(od.length==6){if(od.join()==OR.join())done(2,'Byte, Kilobyte, Megabyte, <b>Gigabyte</b> – das Gigabyte steht an 4. Stelle.');else{fb('r2','❌ Das ist nicht die richtige Reihenfolge. Versuche es noch einmal!');od=[];r3()}}};
+$('#a3r').onclick=()=>{od=[];r3()};
+r3();
+
+/* Raum 4 und 5: Eingaben */
+$('#a4c').onclick=()=>{const v=nz($('#a4i').value);v=='7'?done(3,'7000 : 1000 = 7, denn 1 GB = 1000 MB.'):fb('r3',v?'Nicht ganz. Denke daran: 1 GB = 1000 MB.':'Gib zuerst eine Zahl ein.')};
+$('#a5c').onclick=()=>{const v=nz($('#a5i').value);v=='5'?done(4,'DATEN hat 5 Buchstaben, jeder braucht 1 Byte: 5 Byte (das sind 40 Bit).'):fb('r4',v?'Nicht ganz. Zähle die Buchstaben genau.':'Gib zuerst eine Zahl ein.')};
+
+/* Zahlenschloss */
+const dg=$$('#dg input');
+dg.forEach((d,i)=>{d.oninput=()=>{d.value=d.value.replace(/\D/g,'');if(d.value&&dg[i+1])dg[i+1].focus()};
+d.onkeydown=e=>{if(e.key=='Backspace'&&!d.value&&dg[i-1])dg[i-1].focus();if(e.key=='Enter')$('#open').click()}});
+$('#open').onclick=()=>{const c=dg.map(d=>d.value).join('');
+if(c.length<5)return fb('dr','Gib alle fünf Ziffern ein.');
+if(c!=R.map(r=>r.k).join(''))return fb('dr','❌ Die Tür bleibt zu. Stimmt die Reihenfolge der Räume? Schau auf deinen Notizzettel.');
+won=1;$('#dr h2').textContent='🔓 Die Tür ist offen!';$('#dr .fb').hidden=true;
+const w=$('#win');w.hidden=false;w.innerHTML=`<p class="big">🎉 Geschafft!</p><p>Du und Pepe seid aus dem Serverraum entkommen – in <b>${tm()}</b> Minuten.</p><button class="btn" onclick="location.reload()">Noch einmal spielen</button>`;
+$('#open').hidden=true;dg.forEach(d=>d.disabled=true)};
+</script>
+</body>
+</html>
